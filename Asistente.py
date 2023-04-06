@@ -1,46 +1,47 @@
 import pyttsx3
 import speech_recognition as sr
+'''
 import pywhatkit
 import yfinance as yf
 import pyjokes
 import webbrowser
+'''
 import datetime
 
 
 
-#transformar audio a texto
+# transformar audio a texto
 
 def transformar_audio_en_texto():
+    # recognizer en variable
+    reco = sr.Recognizer()
 
-    #recognizer en variable
-    reco=sr.Recognizer()
-
-    #configuracion de microfono
+    # configuracion de microfono
     with sr.Microphone() as origen:
-        #tiempo de espera
-        reco.pause_threshold=0.8
+        # tiempo de espera
+        reco.pause_threshold = 0.8
 
         # info de que comenzo la grabacion
         print("ya puedes hablar")
 
         # almacenar el audio
-        audio=reco.listen(origen)
+        audio = reco.listen(origen)
 
         # manejo de errores
         try:
-            #buscar en google
-            pedido= reco.recognize_google(audio, language="es-ar")
+            # buscar en google
+            pedido = reco.recognize_google(audio, language="es-ar")
 
             # test de ingreso
-            print('Dijiste: '+pedido)
+            print('Dijiste: ' + pedido)
 
-            #retorno de pedido
+            # retorno de pedido
             return pedido
 
-        #en caso de que no se comprenda el audio
+        # en caso de que no se comprenda el audio
         except sr.UnknownValueError:
 
-            #test de que no comprendio el audio
+            # test de que no comprendio el audio
             print("Ups, no entendi")
 
             # return error
@@ -54,7 +55,7 @@ def transformar_audio_en_texto():
             return "Sigo sin entrender"
 
 
-        #error inesperado
+        # error inesperado
         except:
             # test de que no comprendio el audio
             print("Ups, algo ha salido mal")
@@ -63,22 +64,34 @@ def transformar_audio_en_texto():
             return "Sigo esperando"
 
 
-
-
 # funcion para escuchar a el asistente
 def hablar(mensaje):
+    # encender el motor pyttsx3
+    engine = pyttsx3.init()
+    engine.setProperty('voice',id2)
 
-    #encender el motor pyttsx3
-    engine=pyttsx3.init()
-
-    #pronunciar el mensaje
+    # pronunciar el mensaje
     engine.say(mensaje)
     engine.runAndWait()
 
 
+def pedir_dia():
+    dia=datetime.date.today()
+    dia_semana= dia.weekday()
+    calendario ={ 0:'Lunes',
+                  1:'Martes',
+                  2:'Miércoles',
+                  3:'Jueves',
+                  4:'Viernes',
+                  5:'Sábado',
+                  6:'Domingo',
+    }
+    return calendario[dia_semana]
+
+# opciones de vos / idiomas (eng / spa)
+id1 = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0'
+id2 = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_ES-MX_SABINA_11.0'
 
 
-
-engine=pyttsx3.init()
-for voz in engine.getProperty('voices'):
-    print(voz)
+hablar(transformar_audio_en_texto())
+hablar(pedir_dia())
