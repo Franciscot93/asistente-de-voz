@@ -63,6 +63,9 @@ def transformar_audio_en_texto():
             # return error
             return "Sigo esperando"
 
+# opciones de vos / idiomas (eng / spa)
+id1 = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0'
+id2 = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_ES-MX_SABINA_11.0'
 
 # funcion para escuchar a el asistente
 def hablar(mensaje):
@@ -88,10 +91,28 @@ def pedir_dia():
     }
     return calendario[dia_semana]
 
-# opciones de vos / idiomas (eng / spa)
-id1 = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0'
-id2 = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_ES-MX_SABINA_11.0'
+# informar hora
+def pedir_hora():
+    hora=datetime.datetime.now()
+    hora_procesada=f'En este momento son las {hora.hour} horas con {hora.minute} minutos, {hora.second} segundos'
+
+    return hora_procesada
 
 
-hablar(transformar_audio_en_texto())
+#saludo inicial
+
+def saludo_inicial():
+    hora=datetime.datetime.now()
+
+    if hora.hour < 6 or hora.hour> 20:
+        hablar('Hola, buenas noches, soy Sabina, tu asistente personal, en que puedo ayudarte?')
+    elif 20>hora.hour>=13:
+        hablar('Hola,buenas tardes, soy Sabina, tu asistente personal, en que puedo ayudarte?')
+    elif 13>hora.hour>=6:
+        hablar('Hola, buenos días, soy Sabina, tu asistente personal, en que puedo ayudarte?')
+
+
+
+saludo_inicial()
+
 hablar(pedir_dia())
