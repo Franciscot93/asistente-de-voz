@@ -17,7 +17,7 @@ def transformar_audio_en_texto():
     # configuracion de microfono
     with sr.Microphone() as origen:
         # tiempo de espera
-        reco.pause_threshold = 0.8
+        reco.pause_threshold = 0.5
 
         # info de que comenzo la grabacion
         print("ya puedes hablar")
@@ -140,10 +140,21 @@ def centro_de_pedidos():
             hablar('Claro, comenzare a buscarlo')
             pedido.replace('busca en wikipedia', '')
             wikipedia.set_lang('es')
-            resultado = wikipedia.summary(pedido)
+            resultado = wikipedia.summary(pedido, sentences=1)
             hablar('Pude encontrar el siguiente resultado de wikipedia')
             hablar(resultado)
             continue
+
+        elif 'hasta luego sabina' in pedido:
+            hablar('Hasta pronto maestro, fue un placer servirlo!')
+            comenzar = False
+
+        elif 'busca en internet' in pedido:
+            hablar('Yo me ocupo!')
+            pywhatkit.search(pedido)
+            hablar('he encontrado lo siguiente...')
+            continue
+
 
 
 centro_de_pedidos()
