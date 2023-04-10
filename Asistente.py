@@ -146,15 +146,36 @@ def centro_de_pedidos():
             continue
 
         elif 'hasta luego sabina' in pedido:
-            hablar('Hasta pronto maestro, fue un placer servirlo!')
+            hablar('Me voy a descansar, avisame si me necesitas')
             comenzar = False
 
         elif 'busca en internet' in pedido:
             hablar('Yo me ocupo!')
+            pedido.replace('busca en internet', '')
             pywhatkit.search(pedido)
             hablar('he encontrado lo siguiente...')
             continue
-
+        elif 'reproducir' in pedido:
+            hablar('buena idea,ya comienzo a reproducirlo')
+            pywhatkit.playonyt(pedido)
+            continue
+        elif 'broma' in pedido:
+            hablar(pyjokes.get_joke('es'))
+            continue
+        elif 'precio de las acciones' in pedido:
+            acciones = pedido.split('de')[-1].strip()
+            cartera = {'apple': 'APPL',
+                       'amazon': 'AMZN',
+                       'google': 'GOOGL'}
+            try:
+                accion_buscada = cartera[acciones]
+                accion_buscada = yf.Ticker(accion_buscada)
+                precio_actual = accion_buscada.info['regularMarketPrice']
+                hablar(f'La encontré, el precio de {acciones}es {precio_actual}')
+                continue
+            except:
+                hablar('Perdon pero no la he encontrado')
+                continue
 
 
 centro_de_pedidos()
